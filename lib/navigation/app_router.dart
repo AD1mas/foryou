@@ -22,7 +22,7 @@ class AppRouter {
       transitionsBuilder: (_, animation, __, child) {
         return FadeTransition(opacity: animation, child: child);
       },
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(milliseconds: 400),
     );
   }
 }

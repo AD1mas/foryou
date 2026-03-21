@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color purpleColor = Color(0xFF610C9F);
-  static const Color maroonColor = Color(0xFF940B92);
-  static const Color redColor = Color(0xFFDA0C81);
-  static const Color pinkColor = Color(0xFFE95793);
+  static const Color purpleColor = Color.fromARGB(255, 97, 12, 159);
+  static const Color maroonColor = Color.fromARGB(255, 148, 11, 146);
+  static const Color redColor = Color.fromARGB(255, 218, 12, 129);
+  static const Color pinkColor = Color.fromARGB(255, 233, 87, 147);
+  static const Color greyOpacityColor = Color.fromARGB(82, 55, 55, 55);
 }
 
 class AppTextSizes {

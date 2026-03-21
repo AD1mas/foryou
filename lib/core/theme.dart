@@ -21,4 +21,5 @@ final ThemeData appTheme = ThemeData(
       fontWeight: FontWeight.bold,
     ),
   ),
+  iconTheme: const IconThemeData(color: Colors.white),
 );

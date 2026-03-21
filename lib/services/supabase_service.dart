@@ -8,8 +8,18 @@ class SupabaseService {
   }
 
   Future<List<Map<String, dynamic>>> getMessages() async {
-    final data = await supabase.from('messages').select().order('created_at');
+    final data = await supabase
+        .from('messages')
+        .select()
+        .order('created_at', ascending: true);
 
     return data;
+  }
+
+  Stream<List<Map<String, dynamic>>> subscribeToMessages() {
+    return supabase
+        .from('messages')
+        .stream(primaryKey: ['id'])
+        .order('created_at', ascending: true);
   }
 }
