@@ -22,11 +22,17 @@ class _ChatPageState extends State<ChatPage> {
   List<Map<String, dynamic>> messages = [];
   bool isLoading = true;
 
+  final ScrollController _scrollController = ScrollController();
+
+  bool isAtBottom = true;
+  bool showScrollToBottom = false;
+
   @override
   void initState() {
     super.initState();
     loadMessages();
     subscribeToMessages();
+    _scrollController.addListener(_onScroll);
   }
 
   void subscribeToMessages() {}
@@ -57,6 +63,44 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  void _onScroll() {
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.offset;
+
+    const threshold = 100;
+
+    final atBottomNow = current >= (max - threshold);
+
+    if (atBottomNow != isAtBottom) {
+      setState(() {
+        isAtBottom = atBottomNow;
+        showScrollToBottom = !atBottomNow;
+      });
+    }
+  }
+
+  void _onNewMessage() {
+    if (isAtBottom) {
+      _scrollToBottom();
+    } else {
+      setState(() {
+        showScrollToBottom = true;
+      });
+    }
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) return;
+
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,10 +122,11 @@ class _ChatPageState extends State<ChatPage> {
                         stream: _subscription,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            messages = snapshot.data!;
+                            messages = snapshot.data ?? [];
+                            _onNewMessage();
                             if (kDebugMode) {
                               print(
-                                "Stream updated: ${messages.last} messages",
+                                "Stream updated: ${messages.isNotEmpty ? messages.last : 'No messages'}",
                               );
                             }
                           }
