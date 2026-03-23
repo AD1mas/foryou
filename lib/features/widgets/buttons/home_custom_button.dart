@@ -81,7 +81,7 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
               child: Text(
                 widget.text,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),

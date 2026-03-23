@@ -1,5 +1,9 @@
+// sorce: https://github.com/fluttermapp/flutter_animation_course/blob/main/lib/code/wave_widget_code.dart
+
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:foryou/core/app_style.dart';
 
 class WaveWidget extends StatefulWidget {
   final Size size;
@@ -10,7 +14,7 @@ class WaveWidget extends StatefulWidget {
     super.key,
     required this.size,
     required this.yOffset,
-    required this.color,
+    this.color = AppColors.maroonColor,
   });
 
   @override
@@ -38,7 +42,7 @@ class WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
           const double waveWidth = math.pi / 270;
           const double waveHeight = 20.0;
 
-          for (int i = 0; i <= widget.size.width.toInt(); ++i) {
+          for (int i = 0; i <= widget.size.width.toInt(); i += 10) {
             double calc = math.sin((waveSpeed - i) * waveWidth);
             wavePoints.add(
               Offset(

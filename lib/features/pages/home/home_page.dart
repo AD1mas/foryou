@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/app_style.dart';
-import '../../widgets/home_custom_button.dart';
-import '../../widgets/wave_widget.dart';
+import '../../widgets/buttons/home_custom_button.dart';
+import '../../widgets/animation_widgets/wave_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -15,8 +15,7 @@ class HomePage extends StatelessWidget {
         children: [
           WaveWidget(
             size: MediaQuery.sizeOf(context),
-            yOffset: 200,
-            color: AppColors.maroonColor,
+            yOffset: MediaQuery.sizeOf(context).height * 0.8,
           ),
           Align(
             alignment: Alignment.center,
@@ -39,7 +38,7 @@ class HomePage extends StatelessWidget {
                 AppPaddingsHeight().large(),
                 AnimatedGradientButton(
                   text: "Go to Chat",
-                  onPressed: () => Navigator.pushNamed(context, '/chat'),
+                  onPressed: () => Navigator.pushNamed(context, '/auth'),
                 ),
               ],
             ),

@@ -4,7 +4,7 @@ import 'package:foryou/core/app_style.dart';
 import 'package:foryou/services/supabase_service.dart';
 
 import '../../../services/ai_service.dart';
-import '../../widgets/chat_input.dart';
+import '../../widgets/inputs/chat_input.dart';
 import '../../widgets/hud/app_bar.dart';
 
 class ChatPage extends StatefulWidget {
@@ -44,6 +44,8 @@ class _ChatPageState extends State<ChatPage> {
       messages = data;
       isLoading = false;
     });
+
+    _scrollToBottom();
   }
 
   void sendMessage() {
@@ -109,10 +111,7 @@ class _ChatPageState extends State<ChatPage> {
         padding: const EdgeInsets.all(16),
         child: Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.greyOpacityColor,
-            borderRadius: BorderRadius.circular(16),
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
           child: Column(
             children: [
               Expanded(
@@ -123,7 +122,9 @@ class _ChatPageState extends State<ChatPage> {
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             messages = snapshot.data ?? [];
-                            _onNewMessage();
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _onNewMessage();
+                            });
                             if (kDebugMode) {
                               print(
                                 "Stream updated: ${messages.isNotEmpty ? messages.last : 'No messages'}",
@@ -131,6 +132,7 @@ class _ChatPageState extends State<ChatPage> {
                             }
                           }
                           return ListView.builder(
+                            controller: _scrollController,
                             itemCount: messages.length,
                             itemBuilder: (context, index) {
                               final msg = messages[index];
@@ -144,8 +146,8 @@ class _ChatPageState extends State<ChatPage> {
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
                                     color: msg["role"] == "user"
-                                        ? Colors.blue
-                                        : Colors.grey[800],
+                                        ? AppColors.blueColor
+                                        : AppColors.lightGreyColor,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(msg["content"] ?? ""),

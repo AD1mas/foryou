@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../features/pages/auth/auth_page.dart';
 import '../features/pages/home/home_page.dart';
 import '../features/pages/chat/chat_page.dart';
 
@@ -10,6 +11,9 @@ class AppRouter {
 
       case '/chat':
         return _buildRoute(const ChatPage());
+
+      case '/auth':
+        return _buildRoute(const AuthPage());
 
       default:
         return _buildRoute(const HomePage());
