@@ -147,7 +147,7 @@ class _ChatPageState extends State<ChatPage> {
                                   decoration: BoxDecoration(
                                     color: msg["role"] == "user"
                                         ? AppColors.blueColor
-                                        : AppColors.lightGreyColor,
+                                        : AppColors.grayColor,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(msg["content"] ?? ""),

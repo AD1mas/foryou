@@ -1,32 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../features/pages/auth/auth_page.dart';
 import '../features/pages/home/home_page.dart';
 import '../features/pages/chat/chat_page.dart';
 
+enum AppRoutes { home, auth, chat }
+
 class AppRouter {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
-        return _buildRoute(const HomePage());
+  final goRouter = GoRouter(
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        pageBuilder: (context, state) =>
+            _fadeTransition(const HomePage(), state),
+      ),
 
-      case '/chat':
-        return _buildRoute(const ChatPage());
+      GoRoute(
+        path: AppRouter.auth.name,
+        pageBuilder: (context, state) {
+          final isRegistering =
+              state.uri.queryParameters['register'] != 'false';
+          return _fadeTransition(AuthPage(isRegistering: isRegistering), state);
+        },
+      ),
 
-      case '/auth':
-        return _buildRoute(const AuthPage());
+      GoRoute(
+        path: AppRoutes.chat.name,
+        pageBuilder: (context, state) =>
+            _fadeTransition(const ChatPage(), state),
+      ),
+    ],
+  );
 
-      default:
-        return _buildRoute(const HomePage());
-    }
-  }
-
-  static PageRouteBuilder _buildRoute(Widget page) {
-    return PageRouteBuilder(
-      pageBuilder: (_, __, ___) => page,
-      transitionsBuilder: (_, animation, __, child) {
+  static CustomTransitionPage _fadeTransition(
+    Widget child,
+    GoRouterState state,
+  ) {
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: child,
+      transitionDuration: const Duration(milliseconds: 400),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(opacity: animation, child: child);
       },
-      transitionDuration: const Duration(milliseconds: 400),
     );
   }
 }

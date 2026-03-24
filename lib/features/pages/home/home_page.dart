@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foryou/navigation/app_router.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/app_style.dart';
 import '../../widgets/buttons/home_custom_button.dart';
@@ -37,8 +39,8 @@ class HomePage extends StatelessWidget {
                 ),
                 AppPaddingsHeight().large(),
                 AnimatedGradientButton(
-                  text: "Go to Chat",
-                  onPressed: () => Navigator.pushNamed(context, '/auth'),
+                  text: "Go to Auth",
+                  onPressed: () => context.goNamed(AppRouter.auth.name),
                 ),
               ],
             ),

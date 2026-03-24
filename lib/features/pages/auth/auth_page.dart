@@ -86,6 +86,7 @@ class _AuthPageState extends State<AuthPage> {
       confirmError = null;
     });
 
+    Navigator.pushReplacementNamed(context, '/chat');
     // TODO: auth logic
   }
 

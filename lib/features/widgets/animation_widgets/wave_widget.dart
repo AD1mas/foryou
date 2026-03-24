@@ -42,7 +42,7 @@ class WaveWidgetState extends State<WaveWidget> with TickerProviderStateMixin {
           const double waveWidth = math.pi / 270;
           const double waveHeight = 20.0;
 
-          for (int i = 0; i <= widget.size.width.toInt(); i += 10) {
+          for (int i = 0; i <= widget.size.width.toInt(); i += 1) {
             double calc = math.sin((waveSpeed - i) * waveWidth);
             wavePoints.add(
               Offset(
