@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'navigation/app_router.dart';
 import 'providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -33,16 +34,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
-    return AnimatedTheme(
-      data: themeProvider.themeMode,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-      child: MaterialApp(
-        title: 'AI Helper',
-        debugShowCheckedModeBanner: false,
-        theme: themeProvider.themeMode,
-        initialRoute: '/',
-      ),
+    final appRouter = AppRouter();
+
+    return MaterialApp.router(
+      title: 'AI Helper',
+      debugShowCheckedModeBanner: false,
+
+      routerConfig: appRouter.goRouter,
+
+      theme: themeProvider.themeMode,
     );
   }
 }

@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                 AppPaddingsHeight().large(),
                 AnimatedGradientButton(
                   text: "Go to Auth",
-                  onPressed: () => context.goNamed(AppRouter.auth.name),
+                  onPressed: () => context.goNamed(AppRoutes.auth.name),
                 ),
               ],
             ),

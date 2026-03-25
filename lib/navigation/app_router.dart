@@ -5,39 +5,51 @@ import '../features/pages/auth/auth_page.dart';
 import '../features/pages/home/home_page.dart';
 import '../features/pages/chat/chat_page.dart';
 
-enum AppRoutes { home, auth, chat }
+enum AppRoutes {
+  home('/', 'home'),
+  auth('/auth', 'auth'),
+  chat('/chat', 'chat');
+
+  final String path;
+  final String name;
+
+  const AppRoutes(this.path, this.name);
+}
 
 class AppRouter {
   final goRouter = GoRouter(
-    initialLocation: '/',
+    initialLocation: AppRoutes.home.path,
     routes: [
       GoRoute(
-        path: '/',
-        pageBuilder: (context, state) =>
-            _fadeTransition(const HomePage(), state),
-      ),
+        path: AppRoutes.home.path,
+        name: AppRoutes.home.name,
+        builder: (context, state) => const HomePage(),
 
-      GoRoute(
-        path: AppRouter.auth.name,
-        pageBuilder: (context, state) {
-          final isRegistering =
-              state.uri.queryParameters['register'] != 'false';
-          return _fadeTransition(AuthPage(isRegistering: isRegistering), state);
-        },
-      ),
+        routes: [
+          GoRoute(
+            path: AppRoutes.chat.path,
+            name: AppRoutes.chat.name,
+            pageBuilder: (context, state) => _fade(const ChatPage(), state),
+          ),
 
-      GoRoute(
-        path: AppRoutes.chat.name,
-        pageBuilder: (context, state) =>
-            _fadeTransition(const ChatPage(), state),
+          GoRoute(
+            path: AppRoutes.auth.path,
+            name: AppRoutes.auth.name,
+            pageBuilder: (context, state) {
+              final extra = state.extra as AuthMode?;
+
+              return _fade(
+                AuthPage(initialMode: extra ?? AuthMode.register),
+                state,
+              );
+            },
+          ),
+        ],
       ),
     ],
   );
 
-  static CustomTransitionPage _fadeTransition(
-    Widget child,
-    GoRouterState state,
-  ) {
+  static CustomTransitionPage _fade(Widget child, GoRouterState state) {
     return CustomTransitionPage(
       key: state.pageKey,
       child: child,

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:foryou/core/app_style.dart';
+import 'package:foryou/navigation/app_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/theme_provider.dart';
+import '../../../services/supabase/auth_service.dart';
+import '../../pages/auth/auth_page.dart';
 import '../switches/fancy_switch.dart';
 
 class AnimatedMenu extends StatefulWidget {
@@ -125,16 +129,28 @@ class _AnimatedMenuState extends State<AnimatedMenu>
                               text: "Login",
                               onTap: () {
                                 toggleMenu();
-                                Navigator.pushNamed(context, '/auth');
+                                context.goNamed(
+                                  AppRoutes.auth.name,
+                                  extra: AuthMode.login,
+                                );
                               },
                             ),
-
                             _menuButton(
                               icon: Icons.person_add,
                               text: "Register",
                               onTap: () {
                                 toggleMenu();
-                                Navigator.pushNamed(context, '/auth');
+                                context.goNamed(
+                                  AppRoutes.auth.name,
+                                  extra: AuthMode.register,
+                                );
+                              },
+                            ),
+                            _menuButton(
+                              icon: Icons.exit_to_app,
+                              text: "Sign Out",
+                              onTap: () async {
+                                await AuthService().signOut();
                               },
                             ),
 

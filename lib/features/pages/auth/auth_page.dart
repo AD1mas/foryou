@@ -4,25 +4,28 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foryou/features/widgets/inputs/auth_input.dart';
 
 import '../../../core/app_style.dart';
+import '../../../services/supabase/auth_service.dart';
 import '../../widgets/animation_widgets/wave_widget.dart';
 import '../../widgets/switches/animated_switch.dart';
 import '../../widgets/hud/app_bar.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({super.key, this.isRegistering = true});
+enum AuthMode { login, register }
 
-  final bool isRegistering;
+class AuthPage extends StatefulWidget {
+  const AuthPage({super.key, this.initialMode = AuthMode.register});
+  final AuthMode initialMode;
 
   @override
   State<AuthPage> createState() => _AuthPageState();
 }
 
 class _AuthPageState extends State<AuthPage> {
+  late bool isRegistering;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  late bool isRegistering = widget.isRegistering;
 
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
@@ -35,6 +38,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
     super.initState();
+    isRegistering = widget.initialMode == AuthMode.register;
   }
 
   @override
@@ -51,7 +55,7 @@ class _AuthPageState extends State<AuthPage> {
 
   bool validate() {
     final email = _emailController.text.trim();
-    final pass = _passwordController.text;
+    final password = _passwordController.text;
     final confirm = _confirmPasswordController.text;
 
     emailError = null;
@@ -62,20 +66,18 @@ class _AuthPageState extends State<AuthPage> {
       emailError = "Invalid email";
     }
 
-    if (pass.length < 6) {
+    if (password.length < 6) {
       passwordError = "Min 6 characters";
     }
 
-    if (isRegistering && pass != confirm) {
+    if (isRegistering && password != confirm) {
       confirmError = "Passwords do not match";
     }
-
-    setState(() {});
 
     return emailError == null && passwordError == null && confirmError == null;
   }
 
-  void submit() {
+  void submit() async {
     FocusScope.of(context).unfocus();
 
     if (!validate()) return;
@@ -86,8 +88,14 @@ class _AuthPageState extends State<AuthPage> {
       confirmError = null;
     });
 
-    Navigator.pushReplacementNamed(context, '/chat');
-    // TODO: auth logic
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    if (isRegistering) await AuthService().signUp(email, password);
+    if (!isRegistering) {
+      await AuthService().signIn(email, password);
+
+      Navigator.pushReplacementNamed(context, '/chat');
+    }
   }
 
   @override
