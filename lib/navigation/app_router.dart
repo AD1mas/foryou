@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,6 +38,9 @@ class AppRouter {
             name: AppRoutes.auth.name,
             pageBuilder: (context, state) {
               final extra = state.extra as AuthMode?;
+              if (kDebugMode) {
+                print(extra);
+              }
 
               return _fade(
                 AuthPage(initialMode: extra ?? AuthMode.register),

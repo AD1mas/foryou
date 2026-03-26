@@ -14,6 +14,7 @@ class AppColors {
   static const Color grayColor = Colors.grey;
 
   static const Color darkGreyColor = Color(0xFF111111);
+  static const Color darklightGreyColor = Color.fromARGB(255, 56, 56, 56);
   static const Color lightGreyColor = Color(0xFFE1E1E1);
 
   static const Color blueColor = Colors.blue;
@@ -28,6 +29,8 @@ class AppColors {
   static const Color dayBlueDark = Color(0xFF81D4FA);
   static const Color nightBlueLight = Color(0xFF0D1B2A);
   static const Color nightBlueDark = Colors.black;
+
+  static const Color greenColor = Color(0xFF5BCC5F);
 }
 
 class AppGradients {

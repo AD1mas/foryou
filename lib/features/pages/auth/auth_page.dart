@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foryou/features/widgets/inputs/auth_input.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/app_style.dart';
+import '../../../navigation/app_router.dart';
 import '../../../services/supabase/auth_service.dart';
 import '../../widgets/animation_widgets/wave_widget.dart';
 import '../../widgets/switches/animated_switch.dart';
@@ -35,9 +37,12 @@ class _AuthPageState extends State<AuthPage> {
   String? passwordError;
   String? confirmError;
 
+  Widget registerCallback = SizedBox();
+
   @override
   void initState() {
     super.initState();
+    //if (AuthService().user != null) context.goNamed(AppRoutes.chat.name);
     isRegistering = widget.initialMode == AuthMode.register;
   }
 
@@ -90,11 +95,20 @@ class _AuthPageState extends State<AuthPage> {
 
     final email = _emailController.text.trim();
     final password = _passwordController.text;
-    if (isRegistering) await AuthService().signUp(email, password);
-    if (!isRegistering) {
-      await AuthService().signIn(email, password);
 
-      Navigator.pushReplacementNamed(context, '/chat');
+    if (isRegistering) {
+      AuthService().signUp(email, password);
+      setState(() {
+        registerCallback = Text(
+          'All good!',
+          style: TextStyle(color: AppColors.greenColor),
+        );
+      });
+    }
+    if (!isRegistering) {
+      AuthService().signIn(email, password);
+
+      if (context.mounted) context.goNamed(AppRoutes.chat.name);
     }
   }
 
@@ -274,6 +288,7 @@ class _AuthPageState extends State<AuthPage> {
                                     ),
                                   ),
                                   AppPaddingsHeight().small(),
+                                  registerCallback,
                                 ],
                               ),
                             ),
