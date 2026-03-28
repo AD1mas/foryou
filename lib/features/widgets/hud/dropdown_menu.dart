@@ -124,35 +124,38 @@ class _AnimatedMenuState extends State<AnimatedMenu>
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            _menuButton(
-                              icon: Icons.login,
-                              text: "Login",
-                              onTap: () {
-                                toggleMenu();
-                                context.goNamed(
-                                  AppRoutes.auth.name,
-                                  extra: AuthMode.login,
-                                );
-                              },
-                            ),
-                            _menuButton(
-                              icon: Icons.person_add,
-                              text: "Register",
-                              onTap: () {
-                                toggleMenu();
-                                context.goNamed(
-                                  AppRoutes.auth.name,
-                                  extra: AuthMode.register,
-                                );
-                              },
-                            ),
-                            _menuButton(
-                              icon: Icons.exit_to_app,
-                              text: "Sign Out",
-                              onTap: () async {
-                                await AuthService().signOut();
-                              },
-                            ),
+                            if (AuthService().user == null)
+                              _menuButton(
+                                icon: Icons.login,
+                                text: "Login",
+                                onTap: () {
+                                  toggleMenu();
+                                  context.goNamed(
+                                    AppRoutes.auth.name,
+                                    extra: AuthMode.login,
+                                  );
+                                },
+                              ),
+                            if (AuthService().user == null)
+                              _menuButton(
+                                icon: Icons.person_add,
+                                text: "Register",
+                                onTap: () {
+                                  toggleMenu();
+                                  context.goNamed(
+                                    AppRoutes.auth.name,
+                                    extra: AuthMode.register,
+                                  );
+                                },
+                              ),
+                            if (AuthService().user != null)
+                              _menuButton(
+                                icon: Icons.exit_to_app,
+                                text: "Sign Out",
+                                onTap: () async {
+                                  await AuthService().signOut();
+                                },
+                              ),
 
                             const SizedBox(height: 10),
 
