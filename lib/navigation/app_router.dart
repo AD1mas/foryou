@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:foryou/services/supabase/auth_service.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/pages/auth/auth_page.dart';
@@ -31,11 +32,39 @@ class AppRouter {
             path: AppRoutes.chat.path,
             name: AppRoutes.chat.name,
             pageBuilder: (context, state) => _fade(const ChatPage(), state),
+            redirect: (context, state) {
+              final isLoggedIn = AuthService().session != null;
+              final path = state.uri.path;
+
+              if (!isLoggedIn && path == AppRoutes.chat.path) {
+                return AppRoutes.auth.path;
+              }
+
+              if (isLoggedIn && path == AppRoutes.auth.path) {
+                return AppRoutes.chat.path;
+              }
+
+              return null;
+            },
           ),
 
           GoRoute(
             path: AppRoutes.auth.path,
             name: AppRoutes.auth.name,
+            redirect: (context, state) {
+              final isLoggedIn = AuthService().session != null;
+              final path = state.uri.path;
+
+              if (!isLoggedIn && path == AppRoutes.chat.path) {
+                return AppRoutes.auth.path;
+              }
+
+              if (isLoggedIn && path == AppRoutes.auth.path) {
+                return AppRoutes.chat.path;
+              }
+
+              return null;
+            },
             pageBuilder: (context, state) {
               final extra = state.extra as AuthMode?;
               if (kDebugMode) {
